@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {userStore} from "../../pinia/pinia";
+import {userStore} from "../../src/pinia/pinia";
 import {ElIcon} from "element-plus";
 import {Loading} from "@element-plus/icons-vue";
 const store = userStore()
