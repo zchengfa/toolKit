@@ -1,10 +1,10 @@
 import {createApp} from "vue";
 import App from "./App.vue";
 import {createPinia} from "pinia";
-import ElementPlus from 'element-plus/lib/index'
-import toast from "../Components/Toast/toast";
-import loading from "../Components/Loading/loading";
-
+import ElementPlus from "element-plus";
+import toast from "./components/Toast/toast.ts";
+import loading from "./components/Loading/loading.ts";
+import './style.css';
 const app = createApp(App)
 
 app.use(createPinia())
