@@ -4,7 +4,7 @@ import {getCurrentInstance, ComponentInternalInstance, onMounted} from "vue";
 let { props } = getCurrentInstance() as ComponentInternalInstance;
 
 defineProps({
-  smallImage:{
+  image:{
     default(){
       return ''
     }
@@ -21,10 +21,15 @@ onMounted(()=>{
   })
 })
 
-const listenBox = (selector:string,elements:Element[],event?:string | string[])=>{
+const listenBox = (selector: string, elements: {
+  magnifierImg: Element;
+  magnifierBox: Element;
+  originalBox: Element;
+  mask: Element
+}, event?: string | string[])=>{
   let target = document.querySelector(selector) as Element,defaultEvent = ['mouseover','mousemove','mouseout'];
   !event ? event = defaultEvent : null;
-  const listenEvent = (event,callback)=>{
+  const listenEvent = (event:string,callback:Function)=>{
     target.addEventListener(event,(e)=>callback(e))
   }
 
@@ -35,9 +40,9 @@ const listenBox = (selector:string,elements:Element[],event?:string | string[])=
     return defaultEvent.indexOf(event) !== -1;
   }
 
-  const dealEvent = (event)=>{
+  const dealEvent = (event:string)=>{
     if(checkEvent(event)){
-      listenEvent(event,(e)=>{
+      listenEvent(event,(e:any)=>{
         switch (event){
           case 'mouseover':
             mouseoverEvent(elements);
@@ -72,7 +77,7 @@ const mouseoutEvent = ({mask,magnifierBox})=>{
   magnifierBox.style.display = 'none';
 }
 
-const mousemoveEvent = (e,{mask,magnifierBox,magnifierImg,originalBox})=>{
+const mousemoveEvent = (e:any,{mask,magnifierBox,magnifierImg,originalBox})=>{
   let x = e.pageX - originalBox.offsetLeft , y = e.pageY - originalBox.offsetTop;
   let thresholdX = originalBox.clientWidth - mask.clientWidth , thresholdY = originalBox.clientHeight - mask.clientHeight;
   x -= mask.offsetWidth / 2 ;
@@ -93,11 +98,11 @@ const mousemoveEvent = (e,{mask,magnifierBox,magnifierImg,originalBox})=>{
 <template>
   <div class="magnifier-img-container">
     <div class="original-img-box">
-      <img :src="props.smallImage" alt="original-img">
+      <img :src="props.image as string" alt="original-img">
       <div id="MagnifierMask"></div>
     </div>
     <div class="magnifier-img-box">
-      <img :src="props.smallImage" alt="magnifier-img">
+      <img :src="props.image as string" alt="magnifier-img">
     </div>
   </div>
 </template>
