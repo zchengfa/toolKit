@@ -77,7 +77,7 @@ const mouseoutEvent = ({mask,magnifierBox})=>{
   magnifierBox.style.display = 'none';
 }
 
-const mousemoveEvent = (e:any,{mask,magnifierBox,magnifierImg,originalBox})=>{
+const mousemoveEvent = (e:any,{mask,magnifierBox,originalBox})=>{
   let x = e.pageX - originalBox.offsetLeft , y = e.pageY - originalBox.offsetTop;
   let thresholdX = originalBox.clientWidth - mask.clientWidth , thresholdY = originalBox.clientHeight - mask.clientHeight;
   x -= mask.offsetWidth / 2 ;
@@ -88,9 +88,7 @@ const mousemoveEvent = (e:any,{mask,magnifierBox,magnifierImg,originalBox})=>{
   y = y > thresholdY ? thresholdY : y;
   mask.style.left = x + 'px';
   mask.style.top = y + 'px';
-
-  magnifierImg.style.left = -x * (magnifierImg.clientWidth / magnifierBox.offsetWidth) + 'px';
-  magnifierImg.style.top = -y * (magnifierImg.clientHeight / magnifierBox.offsetHeight) + 'px';
+  magnifierBox.style.backgroundPosition = `${(x/thresholdX)*100}% ${(y/thresholdY)*100}%`;
 }
 
 </script>
@@ -101,9 +99,7 @@ const mousemoveEvent = (e:any,{mask,magnifierBox,magnifierImg,originalBox})=>{
       <img :src="props.image as string" alt="original-img">
       <div id="MagnifierMask"></div>
     </div>
-    <div class="magnifier-img-box">
-      <img :src="props.image as string" alt="magnifier-img">
-    </div>
+    <div class="magnifier-img-box" :style="{backgroundImage:`url(${props.image})`,backgroundSize:'1000px'}"></div>
   </div>
 </template>
 
@@ -134,10 +130,8 @@ $boxHeight: 400px;
     left: 100%;
     width: $boxWidth;
     height: $boxHeight;
+    background-repeat: no-repeat;
     overflow: hidden;
-    img{
-      position: absolute;
-    }
   }
 }
 #MagnifierMask{
